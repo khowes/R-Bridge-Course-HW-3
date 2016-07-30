@@ -1,0 +1,63 @@
+---
+title:  "R Week 3 Assignment Mushrooms"
+author: Ken Howes
+date:   July 30, 2016
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Bridge Week 3 Assignment
+
+Create a data frame with a subset of the columns and rows from the Mushrooms dataset located at the UCI repository. Include the column that indicates whether the mushroom is edible or poisonous and three or four other columns.  You should also add meaningful column names and replace the abbreviations used in the data.
+
+```{r}
+#install.packages("RCurl")
+
+library(RCurl)
+
+# Get Mushroom dataset
+url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/agaricus-lepiota.data"
+
+mushroom_data <- getURL(url)
+getwd()
+mushroom_df <- read.csv(text=mushroom_data,header=F, sep = ",", stringsAsFactors = FALSE)
+
+head(mushroom_df)
+str(mushroom_df)
+
+# Subset data
+mushroom_df_small = subset(mushroom_df,select=c(V1, V3, V5, V18, V19))
+head(mushroom_df_small)
+
+
+# Rename columns
+colnames(mushroom_df_small) <- c("class","cap_surface","bruises","veil_color","ring_number")
+head(mushroom_df_small)
+
+# Recode variable values
+mushroom_df_small$class[mushroom_df_small$class=="e"] <- "edible"
+mushroom_df_small$class[mushroom_df_small$class=="p"] <- "poisonous"
+
+mushroom_df_small$cap_surface[mushroom_df_small$cap_surface=="f"] <- "fibrous"
+mushroom_df_small$cap_surface[mushroom_df_small$cap_surface=="g"] <- "grooves"
+mushroom_df_small$cap_surface[mushroom_df_small$cap_surface=="y"] <- "scaly"
+mushroom_df_small$cap_surface[mushroom_df_small$cap_surface=="s"] <- "smooth"
+
+mushroom_df_small$bruises[mushroom_df_small$bruises=="t"] <- "bruises"
+mushroom_df_small$bruises[mushroom_df_small$bruises=="f"] <- "no"
+
+mushroom_df_small$veil_color[mushroom_df_small$veil_color=="n"] <- "brown"
+mushroom_df_small$veil_color[mushroom_df_small$veil_color=="o"] <- "orange"
+mushroom_df_small$veil_color[mushroom_df_small$veil_color=="w"] <- "white"
+mushroom_df_small$veil_color[mushroom_df_small$veil_color=="y"] <- "yellow"
+
+mushroom_df_small$ring_number[mushroom_df_small$ring_number=="n"] <- "none"
+mushroom_df_small$ring_number[mushroom_df_small$ring_number=="o"] <- "one"
+mushroom_df_small$ring_number[mushroom_df_small$ring_number=="t"] <- "two"
+
+head(mushroom_df_small)
+```
+
